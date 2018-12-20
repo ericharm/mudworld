@@ -1,0 +1,9 @@
+<div id="login">
+  <%= form_tag '/login', class: 'login-form' do %>
+    <fieldset>
+      <%= email_field_tag :email, nil, class: 'input', placeholder: 'Email' %>
+      <%= password_field_tag :password, nil, class: 'input', placeholder: 'Password' %>
+      <%= submit_tag "SIGN IN", class: 'button is-white is-outlined' %>
+    </fieldset>
+  <% end %>
+</div>
