@@ -1,31 +1,26 @@
 import React from 'react'
 import MiniMap from './MiniMap.jsx'
+import Chat from './Chat.jsx'
 const PathsContext = React.createContext('paths')
 
 class MudWorld extends React.Component {
   constructor (props) {
     super(props)
-    window.locationsPath = props.locationsPath
-  }
-
-  componentDidMount () {
-    // this.props.currentUser.tile = this.state.tiles[0]
-  }
-
-  subscribe () {
-    window.App.messages = window.App.cable.subscriptions.create('ChatChannel', {
-      received: (data) => {
-        console.log(data)
-      }
-    })
+    window.paths = {
+      locationsPath: props.locationsPath,
+      chatPath: props.chatPath,
+      controlsPath: props.controlsPath
+    }
+    window.user = props.currentUser
   }
 
   render () {
     return (
       <PathsContext.Provider value={this.props.locationsPath}>
         <React.Fragment>
-          <div>MUDworld</div>
+          <div className='logo'>MUDworld</div>
           <MiniMap />
+          <Chat />
         </React.Fragment>
       </PathsContext.Provider>
     )

@@ -52,11 +52,36 @@ input {
 }
 
 #home {
-    margin: 1em auto 0;
-    max-width: 800px;
-    text-align: center;
+  margin: 1em auto 0;
+  max-width: 800px;
+  text-align: center;
+  padding: 2rem;
+}
+
+.logo {
+  margin-bottom: 2em;
+}
+
+#room-name {
+  color: #A3E406;
 }
 
 #minimap {
   outline: 1px solid #666;
+  width: 100%;
+}
+
+#chat-log {
+  width: 100%;
+  outline: 1px solid;
+  height: 5em;
+  margin: 1rem 0;
+  padding: 1rem;
+  text-align: left;
+  overflow-y: auto;
+}
+
+.message-user {
+  color: #A3E406;
+  margin-right: 1em;
 }

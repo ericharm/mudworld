@@ -1,7 +1,9 @@
 <%= react_component('MudWorld',
   {
     currentUser: @current_user,
-    locationsPath: api_locations_path + '/'
+    locationsPath: api_locations_path + '/',
+    chatPath: api_chats_path + '/',
+    controlsPath: api_controls_path + '/'
   },
   { id: 'home' }
 ) %>

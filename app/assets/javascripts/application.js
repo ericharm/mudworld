@@ -13,9 +13,3 @@
 //= require rails-ujs
 //= require turbolinks
 //= require_tree .
-
-window.App.messages = window.App.cable.subscriptions.create('ChatChannel', {
-  received: (data) => {
-    console.log(data)
-  }
-})

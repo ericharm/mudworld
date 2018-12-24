@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181220014309) do
+ActiveRecord::Schema.define(version: 20181224153911) do
+
+  create_table "doors", force: :cascade do |t|
+    t.integer "from"
+    t.integer "to"
+    t.integer "x"
+    t.integer "y"
+  end
 
   create_table "locations", force: :cascade do |t|
     t.string "name"
@@ -34,6 +41,12 @@ ActiveRecord::Schema.define(version: 20181220014309) do
     t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "x"
+    t.integer "y"
+    t.integer "location_id"
+    t.string "color"
+    t.boolean "connected", default: false
+    t.index ["location_id"], name: "index_users_on_location_id"
   end
 
 end
