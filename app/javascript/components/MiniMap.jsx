@@ -2,6 +2,7 @@ import React from 'react'
 import User from '../User.js'
 import Tile from '../Tile.js'
 import Door from '../Door.js'
+import Config from '../Config.js'
 import MapMessenger from '../MapMessenger.js'
 
 class MiniMap extends React.Component {
@@ -16,24 +17,27 @@ class MiniMap extends React.Component {
   }
 
   addControls () {
+    const self = this
     window.addEventListener('keydown', (event) => {
       if (event.target !== document.getElementById('new-message')) {
         if (['w', 'a', 's', 'd'].indexOf(event.key) > -1) {
-          window.post(window.paths.controlsPath, {
-            user: window.user.id,
-            instruction: event.key
-          }, (res) => {
-            console.log(res)
-          })
+          self.move(event.key)
         }
       }
+    })
+  }
+
+  move (key) {
+    const self = this
+    const controlsPath = self.props.context.paths.controlsPath
+    window.post(controlsPath, { user: self.props.context.user.id, instruction: key }, (res) => {
+      console.log(res)
     })
   }
 
   createStage () {
     let stage = new window.createjs.Stage('minimap')
     stage.scale = 1.5
-    stage.regX = stage.regY = -100
     return stage
   }
 
@@ -58,7 +62,6 @@ class MiniMap extends React.Component {
   }
 
   removeUser (id) {
-    console.log('remove', id)
     const user = this.state.users.find((user) => {
       return user.id === id
     })
@@ -71,6 +74,8 @@ class MiniMap extends React.Component {
   }
 
   loadRoom (locationId) {
+    const user = Object.assign(this.props.context.user, { location_id: locationId })
+    this.props.updateContext({ user })
     const startLocationPath = this.props.context.paths.locationsPath + locationId
     window.get(startLocationPath).then((res) => {
       const data = res.data
@@ -80,9 +85,27 @@ class MiniMap extends React.Component {
         this.setupTiles()
         this.addDoors()
         this.addUsers()
+        this.center()
         this.state.stage.update()
       })
     })
+  }
+
+  center () {
+    const canvas = document.getElementById('minimap')
+    const width = canvas.getBoundingClientRect().width
+    const height = canvas.getBoundingClientRect().height
+    const ratio = width / canvas.width
+    const center = { x: width * ratio, y: height * ratio }
+    const user = {
+      x: this.props.context.user.x * Config.TILE_SIZE,
+      y: this.props.context.user.y * Config.TILE_SIZE
+    }
+    const x = (center.x - user.x) * -1
+    const y = (center.y - user.y) * -1
+    this.state.stage.regX = x
+    this.state.stage.regY = y
+    this.state.stage.update()
   }
 
   clearStage () {

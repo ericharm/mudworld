@@ -9,8 +9,8 @@ class Chat extends React.Component {
       messages: []
     }
     this.messenger = ChatMessenger(this)
-    const newContext = Object.assign(this.props.context, { messenger: this.messenger })
-    this.props.updateContext(newContext)
+    // const newContext = Object.assign(this.props.context, { messenger: this.messenger })
+    this.props.updateContext({ messenger: this.messenger })
     this.subscribe()
   }
 
@@ -23,9 +23,17 @@ class Chat extends React.Component {
   }
 
   addMessage (message) {
-    this.setState({ messages: this.state.messages.concat(message) }, () => {
-      this.refreshScroll()
-    })
+    if (message.location === this.props.context.user.location_id) {
+      this.setState({ messages: this.state.messages.concat(message) }, () => {
+        this.refreshScroll()
+      })
+    }
+  }
+
+  addStrangerMessage (message) {
+    if (message.user.id !== this.props.context.user.id) {
+      this.addMessage(message)
+    }
   }
 
   refreshScroll () {
@@ -37,26 +45,22 @@ class Chat extends React.Component {
   handleSubmit (event) {
     event.preventDefault()
     const message = document.getElementById('new-message')
-    window.post(window.paths.chatPath, { message: message.value }).then((res) => {
+    const chatPath = this.props.context.paths.chatPath
+    window.post(chatPath, { message: message.value }).then((res) => {
       message.value = ''
     })
   }
 
   render () {
     const messages = this.state.messages.map((message, i) => {
-      return <ChatMessage
-        username={message.from ? message.from.username : null}
-        color={message.from ? message.from.color : null}
-        message={message.message}
-        meta={message.meta}
-        key={i} />
+      return <ChatMessage from={message.from} message={message.message} meta={message.meta} key={i} />
     })
     return (
       <React.Fragment>
         <div id='chat-log'>
           <div id='chat-messages'>{messages}</div>
         </div>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit.bind(this)}>
           <fieldset>
             <input id='new-message' autoComplete='off' />
           </fieldset>

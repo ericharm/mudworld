@@ -8,8 +8,8 @@ const ChatMessenger = (chatRoom) => {
     message: (data) => {
       chatRoom.addMessage(data)
     },
-    connection: (data) => {
-      chatRoom.addMessage(data.user.username + ' connected.')
+    mapAction: (data) => {
+      chatRoom.addStrangerMessage(data)
     }
   }
   return messenger
