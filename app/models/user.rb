@@ -14,14 +14,14 @@ class User < ApplicationRecord
 
   def connect
     update(connected: true)
-    ActionCable.server.broadcast 'chats', { type: 'connection', room: location_id, user: safe }
-    ActionCable.server.broadcast 'minimap', { type: 'connection', room: location_id, user: safe }
+    ActionCable.server.broadcast 'minimap', socket_message({ type: 'connection'})
+    # ActionCable.server.broadcast 'chats', { type: 'connection', location_id: location_id, user: safe }
   end
 
   def disconnect
     update(connected: false)
-    ActionCable.server.broadcast 'chats', { type: 'disconnection', room: location_id, user: safe }
-    ActionCable.server.broadcast 'minimap', { type: 'disconnection', room: location_id, user: safe }
+    ActionCable.server.broadcast 'minimap', socket_message({type: 'disconnection'})
+    # ActionCable.server.broadcast 'chats', { type: 'disconnection', location_id: location_id, user: safe }
   end
 
   def move(direction)
@@ -38,12 +38,16 @@ class User < ApplicationRecord
 
   private
 
+    def socket_message(params)
+      params.merge(location_id: location_id, user: safe)
+    end
+
     def enter_door(door, direction)
       from = self.location_id == door.from ? door.from : door.to
       to = from == door.from ? door.to : door.from
-      ActionCable.server.broadcast 'minimap', { type: 'exit', room: from, user: safe }
+      ActionCable.server.broadcast 'minimap', { type: 'exit', location_id: from, user: safe }
       update(location_id: to)
-      ActionCable.server.broadcast 'minimap', { type: 'enter', room: to, user: safe }
+      ActionCable.server.broadcast 'minimap', { type: 'enter', location_id: to, user: safe }
       move({ x: (direction[:x] * 2), y: (direction[:y] * 2) })
     end
 end

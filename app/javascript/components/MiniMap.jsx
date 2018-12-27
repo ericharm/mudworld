@@ -1,20 +1,8 @@
 import React from 'react'
 import User from '../User.js'
 import Tile from '../Tile.js'
-import Config from '../Config.js'
-const DOOR_COLOR = Config.DOOR_COLOR
-const TILE_SIZE = Config.TILE_SIZE
-
-const Door = (stage, door) => {
-  const rect = new window.createjs.Shape()
-  rect.x = door.x * TILE_SIZE
-  rect.y = door.y * TILE_SIZE
-  rect.graphics.beginStroke(DOOR_COLOR).drawRect(
-    0, 0, TILE_SIZE, TILE_SIZE
-  )
-  stage.addChild(rect)
-  return rect
-}
+import Door from '../Door.js'
+import MapMessenger from '../MapMessenger.js'
 
 class MiniMap extends React.Component {
   constructor (props) {
@@ -22,7 +10,8 @@ class MiniMap extends React.Component {
     this.state = {
       stage: null,
       tiles: [],
-      users: []
+      users: [],
+      locationId: null
     }
   }
 
@@ -68,11 +57,25 @@ class MiniMap extends React.Component {
     })
   }
 
+  removeUser (id) {
+    console.log('remove', id)
+    const user = this.state.users.find((user) => {
+      return user.id === id
+    })
+    this.state.stage.removeChild(user.avatar)
+    this.state.stage.update()
+    const users = this.state.users.filter((user) => {
+      return user.id !== id
+    })
+    this.setState({ users })
+  }
+
   loadRoom (locationId) {
-    window.get(window.paths.locationsPath + locationId).then((res) => {
+    const startLocationPath = this.props.context.paths.locationsPath + locationId
+    window.get(startLocationPath).then((res) => {
       const data = res.data
       this.setState({
-        tiles: data.tiles, doors: data.doors, roomName: data.name, users: data.users
+        tiles: data.tiles, doors: data.doors, roomName: data.name, users: data.users, locationId: data.id
       }, () => {
         this.setupTiles()
         this.addDoors()
@@ -89,28 +92,7 @@ class MiniMap extends React.Component {
   subscribe () {
     window.App.mapMessages = window.App.cable.subscriptions.create('MapChannel', {
       received: (data) => {
-        // MapMessenger.respond(data)
-        console.log(data)
-        if (data.type === 'move') {
-          let user = this.state.users.find((user) => {
-            return user.id === data.user.id
-          })
-          user.moveTo(data.user.x, data.user.y)
-        }
-        if (data.type === 'exit') {
-          console.log('user', data.user.id, 'left.')
-          // const user = this.state.users.find((user) => { return user.id === data.user.id })
-          // this.state.stage.remove()
-        }
-        if (data.type === 'enter') {
-          console.log('user', data.user.id, 'entered.')
-          if (data.user.id === window.user.id) {
-            this.clearStage()
-            this.loadRoom(data.user.location_id)
-          } else {
-            // this.setState({ users: this.state.users.concat(User(data.user)) })
-          }
-        }
+        MapMessenger.handle(data, this)
       }
     })
   }
@@ -118,7 +100,7 @@ class MiniMap extends React.Component {
   componentDidMount () {
     const stage = this.createStage()
     this.setState({ stage }, () => {
-      this.loadRoom(window.user.location_id)
+      this.loadRoom(this.props.context.user.location_id)
     })
     this.addControls()
     this.subscribe()

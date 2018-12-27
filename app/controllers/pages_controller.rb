@@ -3,7 +3,7 @@ class PagesController < ApplicationController
 
   def show
     page = params[:page]
-    connect_user if page == 'home'
+    # connect_user if page == 'home'
     render template: "pages/#{page}"
   end
 

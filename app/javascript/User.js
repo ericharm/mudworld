@@ -21,6 +21,9 @@ const User = (stage, user) => {
     user.avatar.y = user.y * TILE_SIZE
     stage.update()
   }
+  // user.leave = () => {
+    // stage.removeChild(user.avatar)
+  // }
   return user
 }
 

@@ -4,6 +4,6 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
-    self.current_user.disconnect
+    # self.current_user.disconnect
   end
 end
