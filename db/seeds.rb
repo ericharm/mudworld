@@ -5,7 +5,7 @@ home_location = Location.find_or_create_by(name: 'home')
   end
 end
 
-tile = home_location.tile.first
+tile = home_location.tiles.first
 
 User.create(
   username: 'admin',
