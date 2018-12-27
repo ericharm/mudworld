@@ -1,23 +1,27 @@
+home_location = Location.find_or_create_by(name: 'home')
+(0...10).each do |x|
+  (0...10).each do |y|
+    Tile.create(x: x, y: y, location_id: home_location.id)
+  end
+end
+
+tile = home_location.tile.first
+
 User.create(
   username: 'admin',
   email: 'mudworld@example.com',
   password: 'password',
-  password_confirmation: 'password'
+  password_confirmation: 'password',
+  location_id: home_location.id,
+  color: '#ff00ff',
+  x: tile.x,
+  y: tile.y
 )
 
-if home_location = Location.create(name: 'home')
-  (0...10).each do |x|
-    (0...10).each do |y|
-      Tile.create(x: x, y: y, location_id: home_location.id)
-    end
-  end
-end
-
-if other_location = Location.create(name: 'overhere')
-  (11...21).each do |x|
-    (0...10).each do |y|
-      Tile.create(x: x, y: y, location_id: other_location.id)
-    end
+other_location = Location.find_or_create_by(name: 'overhere')
+(11...21).each do |x|
+  (0...10).each do |y|
+    Tile.create(x: x, y: y, location_id: other_location.id)
   end
 end
 

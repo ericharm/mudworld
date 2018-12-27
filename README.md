@@ -1,24 +1,17 @@
-# README
+`git clone https://github.com/ericharm/mudworld.git`
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+`cd mudworld`
 
-Things you may want to cover:
+update config/database.yml
 
-* Ruby version
+`bundle install`
 
-* System dependencies
+`yarn`
 
-* Configuration
+`rake db:create`
 
-* Database creation
+`rake db:migrate`
 
-* Database initialization
+`rake db:seed`
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+`rails s`
