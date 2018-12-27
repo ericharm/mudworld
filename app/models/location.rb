@@ -6,4 +6,12 @@ class Location < ApplicationRecord
   def doors
     Door.where(from: id).or(Door.where(to: id))
   end
+
+  def neighbor_tiles
+     neighbor_locations = doors.reduce([]) do |memo, d|
+       memo.concat([d.to, d.from])
+       memo.reject { |door_id| door_id == id  }
+     end
+     Tile.where(location_id: neighbor_locations)
+  end
 end

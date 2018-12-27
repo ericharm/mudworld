@@ -11,6 +11,7 @@ class MiniMap extends React.Component {
     this.state = {
       stage: null,
       tiles: [],
+      neighborTiles: [],
       users: [],
       locationId: null
     }
@@ -44,6 +45,9 @@ class MiniMap extends React.Component {
   setupTiles () {
     this.state.tiles.forEach((tile) => {
       Tile(this.state.stage, tile)
+    })
+    this.state.neighborTiles.forEach((tile) => {
+      Tile(this.state.stage, tile, { obscured: true })
     })
   }
 
@@ -80,7 +84,12 @@ class MiniMap extends React.Component {
     window.get(startLocationPath).then((res) => {
       const data = res.data
       this.setState({
-        tiles: data.tiles, doors: data.doors, roomName: data.name, users: data.users, locationId: data.id
+        tiles: data.tiles,
+        neighborTiles: data.neighbor_tiles,
+        doors: data.doors,
+        roomName: data.name,
+        users: data.users,
+        locationId: data.id
       }, () => {
         this.setupTiles()
         this.addDoors()

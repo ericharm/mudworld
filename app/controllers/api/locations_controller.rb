@@ -7,7 +7,7 @@ module Api
       render json: {
         status: 200,
         message: 'Success',
-        data: location.as_json(include: [:tiles, :users, :doors])
+        data: location.as_json(include: [:tiles, :users, :doors, :neighbor_tiles])
       }
     end
 
