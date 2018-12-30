@@ -66,7 +66,7 @@ input {
   color: #A3E406;
 }
 
-#minimap {
+#minimap-canvas {
   outline: 1px solid #666;
   width: 100%;
 }

@@ -4,6 +4,7 @@ import Tile from '../Tile.js'
 import Door from '../Door.js'
 import Config from '../Config.js'
 import MapMessenger from '../MapMessenger.js'
+const nipplejs = require('nipplejs')
 
 class MiniMap extends React.Component {
   constructor (props) {
@@ -15,28 +16,53 @@ class MiniMap extends React.Component {
       users: [],
       locationId: null
     }
+    this.joystickControls = {
+      'dir:up': 'w',
+      'dir:left': 'a',
+      'dir:down': 's',
+      'dir:right': 'd'
+    }
   }
 
   addControls () {
-    const self = this
     window.addEventListener('keydown', (event) => {
       if (event.target !== document.getElementById('new-message')) {
         if (['w', 'a', 's', 'd'].indexOf(event.key) > -1) {
-          self.move(event.key)
+          this.move(event.key)
         }
       }
+    })
+    this.enableJoystick()
+  }
+
+  enableJoystick () {
+    var self = this
+    var nextMove = null
+    var currentDistance = 0
+    nipplejs.create({
+      zone: document.querySelector('#minimap'),
+      color: 'blue',
+      multitouch: true
+    }).on('end', function (evt, data) {
+      if (nextMove && currentDistance > 10) self.move(self.joystickControls[nextMove])
+      nextMove = null
+      currentDistance = 0
+    }).on('dir:up dir:left dir:down dir:right', function (evt, data) {
+      nextMove = evt.type
+    }).on('move', function (evt, data) {
+      currentDistance = data.distance
     })
   }
 
   move (key) {
     const controlsPath = this.props.store.paths.controlsPath
     window.post(controlsPath, { user: this.props.store.user.id, instruction: key }).then((res) => {
-      console.log(res)
+      // console.log(res)
     })
   }
 
   createStage () {
-    let stage = new window.createjs.Stage('minimap')
+    let stage = new window.createjs.Stage('minimap-canvas')
     stage.scale = 1.5
     return stage
   }
@@ -100,7 +126,7 @@ class MiniMap extends React.Component {
   }
 
   center () {
-    const canvas = document.getElementById('minimap')
+    const canvas = document.getElementById('minimap-canvas')
     const width = canvas.getBoundingClientRect().width
     const height = canvas.getBoundingClientRect().height
     const ratio = width / canvas.width
@@ -141,7 +167,9 @@ class MiniMap extends React.Component {
     return (
       <React.Fragment>
         <div id='room-name'>{ this.state.roomName }</div>
-        <canvas id='minimap' width='1400' height='800' />
+        <div id='minimap'>
+          <canvas id='minimap-canvas' width='1400' height='800' />
+        </div>
       </React.Fragment>
     )
   }
