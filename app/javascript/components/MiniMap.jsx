@@ -29,9 +29,8 @@ class MiniMap extends React.Component {
   }
 
   move (key) {
-    const self = this
-    const controlsPath = self.props.context.paths.controlsPath
-    window.post(controlsPath, { user: self.props.context.user.id, instruction: key }, (res) => {
+    const controlsPath = this.props.store.paths.controlsPath
+    window.post(controlsPath, { user: this.props.store.user.id, instruction: key }).then((res) => {
       console.log(res)
     })
   }
@@ -78,9 +77,9 @@ class MiniMap extends React.Component {
   }
 
   loadRoom (locationId) {
-    const user = Object.assign(this.props.context.user, { location_id: locationId })
-    this.props.updateContext({ user })
-    const startLocationPath = this.props.context.paths.locationsPath + locationId
+    const user = Object.assign(this.props.store.user, { location_id: locationId })
+    this.props.updateStore({ user })
+    const startLocationPath = this.props.store.paths.locationsPath + locationId
     window.get(startLocationPath).then((res) => {
       const data = res.data
       this.setState({
@@ -107,8 +106,8 @@ class MiniMap extends React.Component {
     const ratio = width / canvas.width
     const center = { x: width * ratio, y: height * ratio }
     const user = {
-      x: this.props.context.user.x * Config.TILE_SIZE,
-      y: this.props.context.user.y * Config.TILE_SIZE
+      x: this.props.store.user.x * Config.TILE_SIZE,
+      y: this.props.store.user.y * Config.TILE_SIZE
     }
     const x = (center.x - user.x) * -1
     const y = (center.y - user.y) * -1
@@ -132,7 +131,7 @@ class MiniMap extends React.Component {
   componentDidMount () {
     const stage = this.createStage()
     this.setState({ stage }, () => {
-      this.loadRoom(this.props.context.user.location_id)
+      this.loadRoom(this.props.store.user.location_id)
     })
     this.addControls()
     this.subscribe()

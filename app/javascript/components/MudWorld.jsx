@@ -6,7 +6,7 @@ class MudWorld extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      context: {
+      store: {
         paths: {
           locationsPath: props.locationsPath,
           chatPath: props.chatPath,
@@ -18,17 +18,17 @@ class MudWorld extends React.Component {
     }
   }
 
-  updateContext (contextUpdate) {
-    let newContext = Object.assign(this.state.context, contextUpdate)
-    this.setState({ context: newContext })
+  updateStore (storeProp) {
+    let store = Object.assign(this.state.store, storeProp)
+    this.setState({ store })
   }
 
   render () {
     return (
       <React.Fragment>
         <div className='logo'>MUDworld</div>
-        <MiniMap context={this.state.context} updateContext={this.updateContext.bind(this)} />
-        <Chat context={this.state.context} updateContext={this.updateContext.bind(this)} />
+        <MiniMap store={this.state.store} updateStore={this.updateStore.bind(this)} />
+        <Chat store={this.state.store} updateStore={this.updateStore.bind(this)} />
       </React.Fragment>
     )
   }

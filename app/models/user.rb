@@ -15,13 +15,11 @@ class User < ApplicationRecord
   def connect
     update(connected: true)
     ActionCable.server.broadcast 'minimap', socket_message({ type: 'connection'})
-    # ActionCable.server.broadcast 'chats', { type: 'connection', location_id: location_id, user: safe }
   end
 
   def disconnect
     update(connected: false)
     ActionCable.server.broadcast 'minimap', socket_message({type: 'disconnection'})
-    # ActionCable.server.broadcast 'chats', { type: 'disconnection', location_id: location_id, user: safe }
   end
 
   def move(direction)

@@ -9,8 +9,8 @@ class Chat extends React.Component {
       messages: []
     }
     this.messenger = ChatMessenger(this)
-    // const newContext = Object.assign(this.props.context, { messenger: this.messenger })
-    this.props.updateContext({ messenger: this.messenger })
+    // const newStore = Object.assign(this.props.store, { messenger: this.messenger })
+    this.props.updateStore({ messenger: this.messenger })
     this.subscribe()
   }
 
@@ -23,7 +23,7 @@ class Chat extends React.Component {
   }
 
   addMessage (message) {
-    if (message.location === this.props.context.user.location_id) {
+    if (message.location === this.props.store.user.location_id) {
       this.setState({ messages: this.state.messages.concat(message) }, () => {
         this.refreshScroll()
       })
@@ -31,7 +31,7 @@ class Chat extends React.Component {
   }
 
   addStrangerMessage (message) {
-    if (message.user.id !== this.props.context.user.id) {
+    if (message.user.id !== this.props.store.user.id) {
       this.addMessage(message)
     }
   }
@@ -45,7 +45,7 @@ class Chat extends React.Component {
   handleSubmit (event) {
     event.preventDefault()
     const message = document.getElementById('new-message')
-    const chatPath = this.props.context.paths.chatPath
+    const chatPath = this.props.store.paths.chatPath
     window.post(chatPath, { message: message.value }).then((res) => {
       message.value = ''
     })

@@ -3,13 +3,14 @@ class PagesController < ApplicationController
 
   def show
     page = params[:page]
-    # connect_user if page == 'home'
+    connect_user if page == 'home'
     render template: "pages/#{page}"
   end
 
   private
     def connect_user
       user = current_user
+      # is this secure?
       cookies.signed[:user_id] = user.id
       user.connect
     end
