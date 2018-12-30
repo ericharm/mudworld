@@ -19,8 +19,14 @@ gem 'sqlite3'
 gem 'puma', '~> 3.7'
 gem 'jbuilder', '~> 2.5'
 
-# Use Capistrano for deployment
+gem 'figaro'
 # gem 'capistrano-rails', group: :development
+gem 'capistrano3-nginx', '~> 2.0'
+# gem "capistrano", "~> 3.10", require: false
+gem "capistrano-rails", "~> 1.4", require: false
+gem 'capistrano-rvm'
+gem 'capistrano-bundler', '~> 1.3'
+gem 'capistrano-passenger'
 
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
