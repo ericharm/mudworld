@@ -7,6 +7,10 @@ const MapMessenger = {
     else console.log('Invalid action:', data.type)
   },
 
+  build: (data, map) => {
+    map.loadRoom(data.user.location_id)
+  },
+
   move: (data, map) => {
     if (data.user.location_id === map.state.locationId) {
       let user = map.state.users.find((user) => {

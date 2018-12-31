@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get  '/logout'  => 'sessions#destroy'
 
   namespace :api do
-    resources :locations, only: [:index, :create, :show]
+    resources :locations, only: [:create, :show]
     resources :chats, only: [:create]
     resources :controls, only: [:create]
   end

@@ -34,6 +34,15 @@ class User < ApplicationRecord
     end
   end
 
+  def neighbor_tiles
+    {
+      above: Tile.where(x: x, y: y - 1).first,
+      below: Tile.where(x: x, y: y + 1).first,
+      left: Tile.where(x: x - 1, y: y).first,
+      right: Tile.where(x: x + 1, y: y).first
+    }
+  end
+
   private
 
     def socket_message(params)
