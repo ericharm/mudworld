@@ -48,7 +48,8 @@ class Chat extends React.Component {
     const chatPath = this.props.store.paths.chatPath
     const locationsPath = this.props.store.paths.locationsPath
     const path = (message.value.length && message.value[0] === '/') ? locationsPath : chatPath
-    window.post(path, { message: message.value, user: this.props.store.user }).then((res) => {
+    const userId = this.props.store.user.id
+    window.post(path, { message: message.value, user_id: userId }).then((res) => {
       console.log(res)
       message.value = ''
     })
