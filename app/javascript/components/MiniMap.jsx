@@ -103,6 +103,7 @@ class MiniMap extends React.Component {
   }
 
   loadRoom (locationId) {
+    this.clearStage()
     const user = Object.assign(this.props.store.user, { location_id: locationId })
     this.props.updateStore({ user })
     const startLocationPath = this.props.store.paths.locationsPath + locationId

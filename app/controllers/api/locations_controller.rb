@@ -14,6 +14,11 @@ module Api
     def create
       user = User.find(params[:user_id])
       name = params[:message].split()[1..-1].join(' ')
+
+      if Location.find_by_name(name)
+        duplication_name_error(name)
+      end
+
       tiles = user.neighbor_tiles
       direction = tiles.key(nil)
       has_multiple_possible_door_locations = tiles.compact.count < 3
@@ -37,6 +42,14 @@ module Api
     end
 
     private
+
+    def duplication_name_error(name)
+      render json: {
+        status: 400,
+        message: 'Error',
+        data: "A location name '#{name}' already exists"
+      }
+    end
 
     def bad_starting_location_error
       render json: {
