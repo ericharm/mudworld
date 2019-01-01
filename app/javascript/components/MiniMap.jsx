@@ -109,14 +109,7 @@ class MiniMap extends React.Component {
     const startLocationPath = this.props.store.paths.locationsPath + locationId
     window.get(startLocationPath).then((res) => {
       const data = res.data
-      this.setState({
-        tiles: data.tiles,
-        neighborTiles: data.neighbor_tiles,
-        doors: data.doors,
-        roomName: data.name,
-        users: data.users,
-        locationId: data.id
-      }, () => {
+      this.setState(this.roomStateFromServer(data), () => {
         this.setupTiles()
         this.addDoors()
         this.addUsers()
@@ -124,6 +117,17 @@ class MiniMap extends React.Component {
         this.state.stage.update()
       })
     })
+  }
+
+  roomStateFromServer (data) {
+    return {
+      tiles: data.tiles,
+      neighborTiles: data.neighbor_tiles,
+      doors: data.doors,
+      roomName: data.name,
+      users: data.users,
+      locationId: data.id
+    }
   }
 
   center () {

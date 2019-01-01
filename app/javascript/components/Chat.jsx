@@ -1,6 +1,7 @@
 import React from 'react'
 import ChatMessage from './ChatMessage.jsx'
 import ChatMessenger from '../ChatMessenger.js'
+import CommandMessenger from '../CommandMessenger.js'
 
 class Chat extends React.Component {
   constructor (props) {
@@ -9,8 +10,11 @@ class Chat extends React.Component {
       messages: []
     }
     this.messenger = ChatMessenger(this)
-    // const newStore = Object.assign(this.props.store, { messenger: this.messenger })
     this.props.updateStore({ messenger: this.messenger })
+    this.commandMessenger = CommandMessenger({
+      paths: this.props.store.paths,
+      messenger: this.messenger
+    })
     this.subscribe()
   }
 
@@ -45,14 +49,18 @@ class Chat extends React.Component {
   handleSubmit (event) {
     event.preventDefault()
     const message = document.getElementById('new-message')
-    const chatPath = this.props.store.paths.chatPath
-    const locationsPath = this.props.store.paths.locationsPath
-    const path = (message.value.length && message.value[0] === '/') ? locationsPath : chatPath
-    const userId = this.props.store.user.id
-    window.post(path, { message: message.value, user_id: userId }).then((res) => {
-      console.log(res)
+    if (message.value.match('^/')) {
+      this.commandMessenger.dispatch({
+        message: message.value,
+        user: this.props.store.user
+      })
       message.value = ''
-    })
+    } else {
+      const chatPath = this.props.store.paths.chatPath
+      window.post(chatPath, { message: message.value }).then((res) => {
+        message.value = ''
+      })
+    }
   }
 
   render () {

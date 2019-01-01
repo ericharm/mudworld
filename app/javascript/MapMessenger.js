@@ -43,7 +43,6 @@ const MapMessenger = {
   },
 
   exit: (data, map) => {
-    console.log('exit', map.state.stage.children)
     if (data.user.location_id === map.state.locationId) {
       map.removeUser(data.user.id)
       const messenger = map.props.store.messenger
@@ -52,14 +51,12 @@ const MapMessenger = {
   },
 
   connection: (data, map) => {
-    console.log('connect', map.state.stage.children)
     const messenger = map.props.store.messenger
     messenger.mapAction({ message: data.user.username + ' connected.', user: data.user })
     MapMessenger.enter(data, map)
   },
 
   disconnection: (data, map) => {
-    console.log('disconnected', map.state.stage.children)
     const messenger = map.props.store.messenger
     messenger.mapAction({ message: data.user.username + ' disconnected.', user: data.user })
     MapMessenger.exit(data, map)
