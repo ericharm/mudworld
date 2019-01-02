@@ -27,7 +27,8 @@ class Chat extends React.Component {
   }
 
   addMessage (message) {
-    if (message.location === this.props.store.user.location_id) {
+    const locationId = message.location || message.user.location_id
+    if (locationId === this.props.store.user.location_id) {
       this.setState({ messages: this.state.messages.concat(message) }, () => {
         this.refreshScroll()
       })
