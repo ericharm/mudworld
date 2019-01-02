@@ -10,7 +10,8 @@ class MudWorld extends React.Component {
         paths: {
           locationsPath: props.locationsPath,
           chatPath: props.chatPath,
-          controlsPath: props.controlsPath
+          controlsPath: props.controlsPath,
+          tilesPath: props.tilesPath
         },
         user: props.currentUser,
         messenger: null

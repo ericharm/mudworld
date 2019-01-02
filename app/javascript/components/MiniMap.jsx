@@ -24,6 +24,10 @@ class MiniMap extends React.Component {
     }
   }
 
+  chatMessenger () {
+    return this.props.store.messenger
+  }
+
   addControls () {
     window.addEventListener('keydown', (event) => {
       if (event.target !== document.getElementById('new-message')) {

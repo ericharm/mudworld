@@ -1,5 +1,7 @@
 import User from './User.js'
 
+// socket messages from the minimap channel get handled here
+// maybe change the name to MiniMapChannelObserver
 const MapMessenger = {
   handle: (data, map) => {
     const action = MapMessenger[data.type]
@@ -9,6 +11,10 @@ const MapMessenger = {
 
   build: (data, map) => {
     if (map.state.locationId === data.user.location_id) map.loadRoom(data.user.location_id)
+  },
+
+  dig: (data, map) => {
+    if (map.state.locationId === data.tile.location_id) map.loadRoom(data.tile.location_id)
   },
 
   move: (data, map) => {
@@ -45,19 +51,19 @@ const MapMessenger = {
   exit: (data, map) => {
     if (data.user.location_id === map.state.locationId) {
       map.removeUser(data.user.id)
-      const messenger = map.props.store.messenger
+      const messenger = map.chatMessenger()
       messenger.mapAction({ message: data.user.username + ' left the room.', user: data.user })
     }
   },
 
   connection: (data, map) => {
-    const messenger = map.props.store.messenger
+    const messenger = map.chatMessenger()
     messenger.mapAction({ message: data.user.username + ' connected.', user: data.user })
     MapMessenger.enter(data, map)
   },
 
   disconnection: (data, map) => {
-    const messenger = map.props.store.messenger
+    const messenger = map.chatMessenger()
     messenger.mapAction({ message: data.user.username + ' disconnected.', user: data.user })
     MapMessenger.exit(data, map)
   }

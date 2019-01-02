@@ -9,8 +9,8 @@ class Location < ApplicationRecord
       tile_range = self.tile_range_for_new_location(x, y, direction)
       tile_range[:x].each do |x_|
         tile_range[:y].each do |y_|
-        Tile.create(x: x_, y: y_, location_id: location.id)
-      end
+          Tile.create(x: x_, y: y_, location_id: location.id)
+        end
       end
       from = Tile.find_by(x: x, y: y).location_id
       door = self.door_location(x, y, direction)

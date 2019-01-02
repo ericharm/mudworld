@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :locations, only: [:create, :show]
+    resources :tiles, only: [:create]
     resources :chats, only: [:create]
     resources :controls, only: [:create]
   end

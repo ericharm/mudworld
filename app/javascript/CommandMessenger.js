@@ -12,24 +12,48 @@ const CommandMessenger = (args) => {
   const commandMessenger = {
     dispatch: (data) => {
       const regexEval = data.message.match('^/[b,d,w,g,m,t] ')
+      console.log(regexEval)
       if (!regexEval) return this.invalidCommand()
-      const type = validCommands[regexEval[0].trim()]
-      const action = commandMessenger[type]
-      console.log('action', action)
-      if (action) action(data)
+      else {
+        const type = validCommands[regexEval[0].trim()]
+        const action = commandMessenger[type]
+        const value = data.message.match('^/[b,d,w,g,m,t] (.*)+')[1]
+        if (action) action(data, value)
+      }
     },
 
-    build: (data) => {
+    build: (data, value) => {
       const locationsPath = paths.locationsPath
       const userId = data.user.id
-      window.post(locationsPath, { message: data.message, user_id: userId }).then((res) => {
-        // message.value = '' // no, this is done in the Component
+      window.post(locationsPath, { message: value, user_id: userId })
+    },
+
+    dig: (data, value) => {
+      const tilesPath = paths.tilesPath
+      const userId = data.user.id
+      window.post(tilesPath, { message: value, user_id: userId }).then((res) => {
+        console.log(res)
       })
+    },
+
+    whisper: (data) => {
+      // not implemented
+    },
+
+    global: (data) => {
+      // not implemented
+    },
+
+    mute: (data) => {
+      // not implemented
+    },
+
+    teleport: (data) => {
+      // not implemented
     },
 
     invalidCommand: () => {
       // need a way to debug to a single user in the chat log
-      // messenger.mapAction({ message: 'Invalid command' })
       console.log('Invalid command')
       return false
     }
