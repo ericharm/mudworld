@@ -27,6 +27,8 @@ gem "capistrano-rails", "~> 1.4", require: false
 gem 'capistrano-rvm'
 gem 'capistrano-bundler', '~> 1.3'
 gem 'capistrano-passenger'
+gem 'capistrano'
+gem 'capistrano-figaro-yml', '~> 1.0.2'
 
 group :production do
   gem 'pg'
