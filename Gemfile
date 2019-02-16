@@ -32,6 +32,7 @@ gem 'capistrano-figaro-yml', '~> 1.0.2'
 
 group :production do
   gem 'pg'
+  gem 'redis'
 end
 
 group :development, :test do

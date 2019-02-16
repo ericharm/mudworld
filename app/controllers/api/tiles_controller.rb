@@ -19,11 +19,11 @@ module Api
     private
 
     def obstructing_tiles_error(tiles)
-      render json: { status: 400, message: 'Error', data: tiles }   
+      render json: { status: 400, message: 'Error', data: tiles }
     end
 
     def tile_creation_error
-      render json: { status: 400, message: 'Error', data: 'Could not create new tile' }   
+      render json: { status: 400, message: 'Error', data: 'Could not create new tile' }
     end
   end
 end

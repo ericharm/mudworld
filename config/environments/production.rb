@@ -1,5 +1,5 @@
 Rails.application.configure do
-  config.action_cable.url = 'ws://localhost:3000/cable'
+  config.action_cable.url = 'wss://mudworld.ericharm.com/cable'
 
   # Verifies that versions and hashed value of the package contents in the project's package.json
   config.webpacker.check_yarn_integrity = false
