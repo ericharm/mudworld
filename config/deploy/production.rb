@@ -25,6 +25,11 @@ role :db,  %w{ubuntu@34.238.247.80}
 # role :web, %w{user1@primary.com user2@additional.com}, other_property: :other_value
 # role :db,  %w{deploy@example.com}
 
+task :talk do
+  on roles(:all) do |host|
+    execute :echo, "hello world"
+  end
+end
 
 
 # Configuration
