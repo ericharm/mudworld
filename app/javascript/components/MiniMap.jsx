@@ -1,44 +1,40 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { Context, setUser, setStage } from '../Store.jsx'
-import MiniMapService from '../MiniMapService.js'
-import MapMessenger from '../MapMessenger.js'
-import ChatMessenger from '../ChatMessenger.js'
+import { Context, setUser, setRoomies, setCurrentRoom, receivedMessage } from '../Store.jsx'
 
-const createStage = () => {
-  let stage = new window.createjs.Stage('minimap-canvas')
-  stage.scale = 1.5
-  return stage
-}
+import Stage from '../Stage.js'
+import Config from '../Config.js'
+import Tile from '../Tile.js'
+import Door from '../Door.js'
+import User from '../User.js'
+
+import MapMessenger from '../MapMessenger.js'
+import { enableControls } from '../Controls.js'
+import { get } from '../Http.js'
 
 const MiniMap = () => {
   const { state, dispatch } = useContext(Context)
 
-  useEffect(() => {
-    dispatch(setStage(createStage()))
-    if (state.currentUser) {
-      console.log('loading room')
-      MiniMapService({ state, dispatch }).loadRoom(state.currentUser.location_id)
-      MiniMapService({ state, dispatch }).enableControls()
-      subscribe()
-    }
-  }, [state.currentUser])
-
-
-  const subscribe = () => {
-    window.App.mapMessages = window.App.cable.subscriptions.create('MapChannel', {
-      received: (data) => {
-        // MiniMapService({ state, dispatch }).addUsers([data.user])
-        // const action = MapMessenger({ state, dispatch })[data.type]
-        // console.log('action', data.type)
-        // if (action) action(data)
-        // else console.log('Invalid action:', data.type)
-        // MapMessenger is the handler for anything on this channel
-        dispatch({ type: data.type, data })
-        // MapMessenger({ dispatch }).handle(data)
-        // dispatch(handleSocketMessage(data))
+  function subscribe () {
+    window.App.cable.subscriptions.create('MapChannel', {
+      received: function (data) {
+        // MapMessenger({ state, dispatch }).handle(data)
+        dispatch(receivedMessage(data))
       }
     })
   }
+
+  useEffect(() => {
+    if (state.currentUser) {
+      subscribe()
+      Stage.set(new window.createjs.Stage('minimap-canvas'))
+      Stage.loadRoom({ state, dispatch, locationId: state.currentUser.location_id })
+      enableControls({ user: state.currentUser, controlsPath: state.paths.controlsPath })
+    }
+  }, [state.currentUser])
+
+  useEffect(() => {
+    MapMessenger({ state, dispatch }).handle(state.lastMessage)
+  }, [state.lastMessage])
 
   return (
     <React.Fragment>

@@ -1,6 +1,6 @@
-var token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+const token = document.querySelector('meta[name="csrf-token"]').getAttribute('content')
 
-window.get = function (url) {
+export const get = function (url) {
   return window.fetch(url, {
     cache: 'no-cache',
     credentials: 'same-origin',
@@ -17,7 +17,7 @@ window.get = function (url) {
   })
 }
 
-window.post = function (url, data) {
+export const post = function (url, data) {
   return window.fetch(url, {
     body: JSON.stringify(data),
     cache: 'no-cache',
@@ -35,7 +35,7 @@ window.post = function (url, data) {
   })
 }
 
-window.put = function (url, data) {
+export const put = function (url, data) {
   return window.fetch(url, {
     body: JSON.stringify(data),
     cache: 'no-cache',
