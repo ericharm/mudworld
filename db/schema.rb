@@ -12,6 +12,9 @@
 
 ActiveRecord::Schema.define(version: 20181224153911) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "doors", force: :cascade do |t|
     t.integer "from"
     t.integer "to"
@@ -28,7 +31,7 @@ ActiveRecord::Schema.define(version: 20181224153911) do
   create_table "tiles", force: :cascade do |t|
     t.integer "x"
     t.integer "y"
-    t.integer "location_id"
+    t.bigint "location_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["location_id"], name: "index_tiles_on_location_id"
@@ -43,10 +46,11 @@ ActiveRecord::Schema.define(version: 20181224153911) do
     t.datetime "updated_at", null: false
     t.integer "x"
     t.integer "y"
-    t.integer "location_id"
+    t.bigint "location_id"
     t.string "color"
     t.boolean "connected", default: false
     t.index ["location_id"], name: "index_users_on_location_id"
   end
 
+  add_foreign_key "tiles", "locations"
 end

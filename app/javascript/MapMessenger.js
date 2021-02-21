@@ -40,15 +40,15 @@ const MapMessenger = ({ state, dispatch }) => {
       if (data.user.id === state.currentUser.id) {
         Stage.clear()
         Stage.loadRoom({ state, dispatch, locationId: data.user.location_id })
-      // const messenger = map.props.store.messenger
-      // messenger.mapAction({ message: data.user.username + ' entered.', user: data.user })
-      //   if (map.state.users.find((user) => { return user.id === data.user.id })) return null
-      //   else {
-      //     map.setState({
-      //       users: map.state.users.concat(User(map.state.stage, data.user))
-      //     }, () => { map.state.stage.update() })
-      //   }
-      // }
+        // const messenger = map.props.store.messenger
+        // messenger.mapAction({ message: data.user.username + ' entered.', user: data.user })
+        //   if (map.state.users.find((user) => { return user.id === data.user.id })) return null
+        //   else {
+        //     map.setState({
+        //       users: map.state.users.concat(User(map.state.stage, data.user))
+        //     }, () => { map.state.stage.update() })
+        //   }
+        // }
       }
     },
 
