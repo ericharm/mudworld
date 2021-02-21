@@ -1,38 +1,21 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
+import { Context, setCurrentUser, setPaths } from '../Store.jsx'
 import MiniMap from './MiniMap.jsx'
 import Chat from './Chat.jsx'
 
-class MudWorld extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      store: {
-        paths: {
-          locationsPath: props.locationsPath,
-          chatPath: props.chatPath,
-          controlsPath: props.controlsPath,
-          tilesPath: props.tilesPath
-        },
-        user: props.currentUser,
-        messenger: null
-      }
-    }
-  }
+const MudWorld = (props) => {
+  const { dispatch } = useContext(Context)
 
-  updateStore (storeProp) {
-    let store = Object.assign(this.state.store, storeProp)
-    this.setState({ store })
-  }
+  useEffect(() => {
+    dispatch(setCurrentUser(props.user))
+    dispatch(setPaths(props.paths))
+  }, [])
 
-  render () {
-    return (
-      <React.Fragment>
-        <div className='logo'>MUDworld</div>
-        <MiniMap store={this.state.store} updateStore={this.updateStore.bind(this)} />
-        <Chat store={this.state.store} updateStore={this.updateStore.bind(this)} />
-      </React.Fragment>
-    )
-  }
+  return (
+    <React.Fragment>
+      <MiniMap />
+    </React.Fragment>
+  )
 }
 
 export default MudWorld

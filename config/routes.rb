@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   post '/login'   => 'sessions#create'
   get  '/logout'  => 'sessions#destroy'
 
+  get '/something' => 'pages#show', page: 'something'
+
   namespace :api do
     resources :locations, only: [:create, :show]
     resources :tiles, only: [:create]

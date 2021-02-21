@@ -2,6 +2,7 @@ class PagesController < ApplicationController
   before_action :authorize
 
   def show
+    @tiles = Tile.all.includes(:location)
     page = params[:page]
     connect_user if page == 'home'
     render template: "pages/#{page}"

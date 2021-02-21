@@ -12,8 +12,7 @@ const CommandMessenger = (args) => {
   const commandMessenger = {
     dispatch: (data) => {
       const regexEval = data.message.match('^/[b,d,w,g,m,t] ')
-      console.log(regexEval)
-      if (!regexEval) return this.invalidCommand()
+      if (!regexEval) return commandMessenger.invalidCommand()
       else {
         const type = validCommands[regexEval[0].trim()]
         const action = commandMessenger[type]
